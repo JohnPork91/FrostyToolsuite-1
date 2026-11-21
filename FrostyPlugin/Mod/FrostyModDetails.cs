@@ -15,6 +15,11 @@ namespace Frosty.Core.Mod
         public string Link { get; }
         public ImageSource Icon { get; private set; }
         public List<ImageSource> Screenshots { get; } = new List<ImageSource>();
+
+        /// <summary>Encoded (PNG/JPG) icon bytes as stored in the mod; used by non-WPF UIs such as the ImGui Mod Manager.</summary>
+        public byte[] IconData { get; private set; }
+        /// <summary>Encoded screenshot bytes, in the same order as <see cref="Screenshots"/>.</summary>
+        public List<byte[]> ScreenshotData { get; } = new List<byte[]>();
         public List<FrostyModRequirement> Requirements { get; } = new List<FrostyModRequirement>();
 
         private string category;
@@ -31,11 +36,13 @@ namespace Frosty.Core.Mod
 
         public void SetIcon(byte[] buffer)
         {
+            IconData = buffer;
             Icon = LoadImage(buffer);
         }
 
         public void AddScreenshot(byte[] buffer)
         {
+            ScreenshotData.Add(buffer);
             ImageSource screenshot = LoadImage(buffer);
             Screenshots.Add(screenshot);
         }

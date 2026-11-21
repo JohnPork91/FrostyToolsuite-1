@@ -194,6 +194,14 @@
     <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />
   </Project>
+  <Project Path="FrostyImGui/FrostyImGui.csproj">
+    <BuildType Solution="Release|*" Project="Release - Final" />
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="FrostyModManager.ImGui/FrostyModManager.ImGui.csproj">
+    <BuildType Solution="Release|*" Project="Release - Final" />
+    <Platform Project="x64" />
+  </Project>
   <Project Path="FrostyHash/FrostyHash.csproj">
     <BuildType Solution="Release|*" Project="Release - Final" />
     <Platform Project="x64" />

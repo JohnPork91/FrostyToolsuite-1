@@ -47,8 +47,20 @@ namespace Frosty.Core.Managers
             notifications.Clear();
         }
 
+        /// <summary>
+        /// Optional hook for hosts without a WPF Application (the ImGui Mod Manager); when set it receives
+        /// notifications instead of the WPF toast windows.
+        /// </summary>
+        public static Action<string, int> ExternalHandler { get; set; }
+
         public async void Show(string text, int duration = 3)
         {
+            if (Application.Current == null)
+            {
+                ExternalHandler?.Invoke(text, duration);
+                return;
+            }
+
             if (Thread.CurrentThread == Application.Current.Dispatcher.Thread)
             {
                 FrostyNotification notification = new FrostyNotification(text, duration);

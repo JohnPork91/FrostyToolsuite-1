@@ -37,7 +37,8 @@ namespace Frosty.Core
         public static string ProfileSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty/" + ProfilesLibrary.ProfileName;
         public static string GlobalSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty";
 
-        public static IEditorWindow EditorWindow => Application.Current.MainWindow as IEditorWindow;
+        // Application.Current is null in hosts that don't run a WPF Application (e.g. the ImGui Mod Manager).
+        public static IEditorWindow EditorWindow => Application.Current?.MainWindow as IEditorWindow;
 
         public static void ClearProfileData()
         {

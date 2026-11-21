@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- Still -windows: FrostyCore/FrostySdk/plugins are WPF-based class libraries. This app just never opens a WPF window. -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>FrostyModManager.Gui</RootNamespace>
+    <AssemblyName>FrostyModManagerImGui</AssemblyName>
+    <Platforms>x64</Platforms>
+    <Configurations>Developer - Debug;Release - Alpha;Release - Beta;Release - Final</Configurations>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>..\FrostyModManager\AppIcon.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.6.3</AssemblyVersion>
+    <FileVersion>1.0.6.3</FileVersion>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <!-- Keep the two Mod Managers' output apart so they can be built side by side. -->
+    <OutputPath>bin\ImGui\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Developer - Debug'">
+    <DefineConstants>TRACE;DEBUG;FROSTY_DEVELOPER</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release - Alpha'">
+    <DefineConstants>TRACE;FROSTY_ALPHA</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release - Beta'">
+    <DefineConstants>TRACE;FROSTY_BETA</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release - Final'">
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FrostyImGui\FrostyImGui.csproj" />
+    <ProjectReference Include="..\FrostyHash\FrostyHash.csproj" />
+    <ProjectReference Include="..\FrostyModSupport\FrostyModSupport.csproj" />
+    <ProjectReference Include="..\FrostyPlugin\FrostyCore.csproj" />
+    <ProjectReference Include="..\FrostySdk\FrostySdk.csproj" />
+  </ItemGroup>
+
+  <!-- UI-free code shared with the WPF Mod Manager (linked, not copied, so fixes land in both). -->
+  <ItemGroup>
+    <Compile Include="..\FrostyModManager\Compression\*.cs" LinkBase="Compression" />
+    <Compile Include="..\FrostyModManager\FileUnblocker.cs" Link="FileUnblocker.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\FrostyModManager\Images\**\*.png" Link="Images\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FrostyModManager\Credits.txt" Link="Credits.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FrostyModManager\ThirdParty\LZMA.dll" Link="ThirdParty\LZMA.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FrostyModManager\ThirdParty\UnRAR.dll" Link="ThirdParty\UnRAR.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

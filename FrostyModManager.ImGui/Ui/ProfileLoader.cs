@@ -19,6 +19,15 @@ namespace FrostyModManager.Gui.Ui
     /// </summary>
     internal static class ProfileLoader
     {
+        /// <summary>Shown in dialog titles; the Editor project links this file and sets its own name.</summary>
+        public static string AppName { get; set; } = "Frosty Mod Manager";
+
+        /// <summary>
+        /// Extra loading steps that run on the worker thread after the managers are initialized
+        /// (the Editor loads localized strings, the custom string list and plugin startup actions here).
+        /// </summary>
+        public static Action<TaskContext> AfterDataLoaded { get; set; }
+
         /// <summary>Loads <paramref name="profile"/>; <paramref name="done"/> receives true on success.</summary>
         public static void Load(string profile, Action<bool> done)
         {
@@ -33,7 +42,7 @@ namespace FrostyModManager.Gui.Ui
             if (!Frosty.Core.App.IsEditor && !ProfilesLibrary.EnableExecution)
             {
                 Dialogs.Message("The selected profile is a read-only profile, and therefore cannot be loaded in the mod manager",
-                    "Frosty Mod Manager", onClose: _ => done(false));
+                    AppName, onClose: _ => done(false));
                 return;
             }
 
@@ -73,7 +82,7 @@ namespace FrostyModManager.Gui.Ui
 
                     ApplyKeys(keyData, next);
                 },
-                () => Dialogs.Message("Encryption key not entered. Unable to load profile.", "Frosty Mod Manager", onClose: _ => next(false))));
+                () => Dialogs.Message("Encryption key not entered. Unable to load profile.", AppName, onClose: _ => next(false))));
         }
 
         private static void ApplyKeys(byte[] keyData, Action<bool> next)
@@ -102,7 +111,7 @@ namespace FrostyModManager.Gui.Ui
             catch
             {
                 File.Delete(keyFile);
-                Dialogs.Message("Encryption key is invalid. Unable to load profile.", "Frosty Mod Manager", onClose: _ => next(false));
+                Dialogs.Message("Encryption key is invalid. Unable to load profile.", AppName, onClose: _ => next(false));
                 return;
             }
 
@@ -125,13 +134,15 @@ namespace FrostyModManager.Gui.Ui
 
                 if (TypeLibrary.GetSdkVersion() != Frosty.Core.App.FileSystemManager.Head)
                     sdkOutOfDate = true;
+                else
+                    AfterDataLoaded?.Invoke(task);
             },
             cancellable: false,
             onDone: ctx =>
             {
                 if (ctx.Exception != null)
                 {
-                    Dialogs.Message("Failed to load profile:\n" + ctx.Exception.Message, "Frosty Mod Manager", onClose: _ => done(false));
+                    Dialogs.Message("Failed to load profile:\n" + ctx.Exception.Message, AppName, onClose: _ => done(false));
                     return;
                 }
 
@@ -140,8 +151,8 @@ namespace FrostyModManager.Gui.Ui
                     // SdkUpdateWindow (SDK generation) has not been ported to ImGui yet.
                     Dialogs.Message(
                         "The SDK for this game is missing or out of date.\n\n" +
-                        "Generating an SDK isn't available in the ImGui Mod Manager yet. Run the Frosty Editor or the WPF Mod Manager once for this game to generate it, then try again.",
-                        "Frosty Mod Manager", onClose: _ => done(false));
+                        "Generating an SDK isn't available in the ImGui build yet. Run the WPF Frosty Editor once for this game to generate it, then try again.",
+                        AppName, onClose: _ => done(false));
                     return;
                 }
 

@@ -10,7 +10,7 @@ namespace Frosty.ImGuiKit
 {
     public enum DialogResult { None, Ok, Yes, No, Cancel }
 
-    public enum DialogButtons { Ok, OkCancel, YesNo }
+    public enum DialogButtons { Ok, OkCancel, YesNo, YesNoCancel }
 
     /// <summary>
     /// Base class for modal dialogs. ImGui is immediate-mode, so unlike WPF's ShowDialog()
@@ -180,13 +180,25 @@ namespace Frosty.ImGuiKit
                     if (ImGui.Button("No", new Vector2(80, 0)) || ImGui.IsKeyPressed(ImGuiKey.Escape))
                         Finish(DialogResult.No);
                     break;
+                case DialogButtons.YesNoCancel:
+                    if (ImGui.Button("Yes", new Vector2(80, 0)))
+                        Finish(DialogResult.Yes);
+                    ImGui.SameLine();
+                    if (ImGui.Button("No", new Vector2(80, 0)))
+                        Finish(DialogResult.No);
+                    ImGui.SameLine();
+                    if (ImGui.Button("Cancel", new Vector2(80, 0)) || ImGui.IsKeyPressed(ImGuiKey.Escape))
+                        Finish(DialogResult.Cancel);
+                    break;
             }
         }
 
         protected override void OnDismissed()
         {
             // Closing with X counts as the negative answer, like WPF's MessageBox.
-            Finish(buttons == DialogButtons.YesNo ? DialogResult.No : buttons == DialogButtons.OkCancel ? DialogResult.Cancel : DialogResult.Ok);
+            Finish(buttons == DialogButtons.YesNo ? DialogResult.No
+                : buttons == DialogButtons.OkCancel || buttons == DialogButtons.YesNoCancel ? DialogResult.Cancel
+                : DialogResult.Ok);
         }
 
         private void Finish(DialogResult result)

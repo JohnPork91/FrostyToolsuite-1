@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!-- Still -windows: FrostyCore/FrostySdk/plugins are WPF-based class libraries. This app just never opens a WPF window. -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>FrostyEditor.Gui</RootNamespace>
+    <AssemblyName>FrostyEditorImGui</AssemblyName>
+    <Platforms>x64</Platforms>
+    <Configurations>Developer - Debug;Release - Alpha;Release - Beta;Release - Final</Configurations>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>..\FrostyEditor\AppIcon.ico</ApplicationIcon>
+    <AssemblyVersion>1.0.7.1</AssemblyVersion>
+    <FileVersion>1.0.7.1</FileVersion>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <!--
+    Builds into the WPF Editor's output folders on purpose: plugins, Profiles/ (generated SDK), ThirdParty/ and Resources/
+    already live there, and the Editor loads them relative to its own exe. Both exes can sit side by side.
+  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Developer - Debug'">
+    <OutputPath>..\FrostyEditor\bin\Developer\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;FROSTY_DEVELOPER</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release - Alpha'">
+    <OutputPath>..\FrostyEditor\bin\Release\Alpha\</OutputPath>
+    <DefineConstants>TRACE;FROSTY_ALPHA</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release - Beta'">
+    <OutputPath>..\FrostyEditor\bin\Release\Beta\</OutputPath>
+    <DefineConstants>TRACE;FROSTY_BETA</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Release - Final'">
+    <OutputPath>..\FrostyEditor\bin\Release\Final\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FrostyImGui\FrostyImGui.csproj" />
+    <ProjectReference Include="..\FrostyHash\FrostyHash.csproj" />
+    <ProjectReference Include="..\FrostyModSupport\FrostyModSupport.csproj" />
+    <ProjectReference Include="..\FrostyPlugin\FrostyCore.csproj" />
+    <ProjectReference Include="..\FrostySdk\FrostySdk.csproj" />
+  </ItemGroup>
+
+  <!-- UI code shared with the ImGui Mod Manager (linked, not copied, so fixes land in both) and a UI-free helper from the WPF Editor. -->
+  <ItemGroup>
+    <Compile Include="..\FrostyEditor\FileUnblocker.cs" Link="FileUnblocker.cs" />
+    <Compile Include="..\FrostyModManager.ImGui\Ui\GameSelectScreen.cs" Link="Shared\GameSelectScreen.cs" />
+    <Compile Include="..\FrostyModManager.ImGui\Ui\ProfileLoader.cs" Link="Shared\ProfileLoader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\FrostyEditor\Images\**\*.png" Link="Images\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\FrostyEditor\Credits.txt" Link="Credits.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

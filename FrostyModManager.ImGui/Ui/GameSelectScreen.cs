@@ -117,7 +117,7 @@ namespace FrostyModManager.Gui.Ui
             }
 
             ImGui.TextUnformatted("Select a game");
-            ImGui.TextDisabled("Frosty Mod Manager " + Frosty.Core.App.Version);
+            ImGui.TextDisabled(ProfileLoader.AppName + " " + Frosty.Core.App.Version);
             ImGui.Separator();
 
             float footer = ImGui.GetFrameHeightWithSpacing() + ImGui.GetStyle().ItemSpacing.Y;

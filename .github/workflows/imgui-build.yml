@@ -33,7 +33,7 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
-          msbuild "${{ matrix.project }}/${{ matrix.project }}.csproj" -restore "-p:Configuration=Release - Final" -p:Platform=x64 -p:RestorePackagesConfig=true -maxcpucount -verbosity:minimal *> build.log
+          msbuild "${{ matrix.project }}/${{ matrix.project }}.csproj" -restore "-p:Configuration=Release - Final" -p:Platform=x64 -p:RestorePackagesConfig=true "-p:SolutionDir=${{ github.workspace }}\\" -maxcpucount -verbosity:minimal *> build.log
           $code = $LASTEXITCODE
           # surface compiler errors as one annotation so they can be read without downloading logs
           $errs = Get-Content build.log | Where-Object { $_ -match 'error [A-Z]+[0-9]+' } |

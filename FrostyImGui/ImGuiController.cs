@@ -92,7 +92,7 @@ void main()
             ImGuiIOPtr io = ImGui.GetIO();
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
-            io.IniFilename = null; // no imgui.ini next to the exe; layout is code-driven
+            unsafe { io.NativePtr->IniFilename = null; } // no imgui.ini next to the exe; layout is code-driven
 
             // the built-in bitmap font is tiny and ASCII-only; use the system UI font when there is one
             string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts", "segoeui.ttf");

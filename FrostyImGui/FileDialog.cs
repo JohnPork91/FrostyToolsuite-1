@@ -230,7 +230,7 @@ namespace Frosty.ImGuiKit
                                 selected.Add(row.FullPath);
 
                             lastClicked = row.Name;
-                            fileName = multiselect ? string.Join(" ", selected.Select(Path.GetFileName)) : row.Name;
+                            fileName = multiselect ? string.Join(" ", selected.Select(p => Path.GetFileName(p))) : row.Name;
                         }
                     }
 

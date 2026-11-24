@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -92,6 +93,11 @@ void main()
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
             io.ConfigFlags |= ImGuiConfigFlags.NavEnableKeyboard;
             io.IniFilename = null; // no imgui.ini next to the exe; layout is code-driven
+
+            // the built-in bitmap font is tiny and ASCII-only; use the system UI font when there is one
+            string fontPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Fonts", "segoeui.ttf");
+            if (File.Exists(fontPath))
+                io.Fonts.AddFontFromFileTTF(fontPath, 16f);
 
             CreateDeviceResources(outputDescription);
             ImGui.NewFrame();
@@ -253,12 +259,6 @@ void main()
         {
             switch (key)
             {
-                case Key.A: result = ImGuiKey.A; return true;
-                case Key.C: result = ImGuiKey.C; return true;
-                case Key.V: result = ImGuiKey.V; return true;
-                case Key.X: result = ImGuiKey.X; return true;
-                case Key.Y: result = ImGuiKey.Y; return true;
-                case Key.Z: result = ImGuiKey.Z; return true;
                 case Key.Tab: result = ImGuiKey.Tab; return true;
                 case Key.Left: result = ImGuiKey.LeftArrow; return true;
                 case Key.Right: result = ImGuiKey.RightArrow; return true;
@@ -281,9 +281,22 @@ void main()
                 case Key.ShiftRight: result = ImGuiKey.RightShift; return true;
                 case Key.AltLeft: result = ImGuiKey.LeftAlt; return true;
                 case Key.AltRight: result = ImGuiKey.RightAlt; return true;
-                case Key.F2: result = ImGuiKey.F2; return true;
-                case Key.F5: result = ImGuiKey.F5; return true;
-                default: result = ImGuiKey.None; return false;
+                default:
+                    // letters and function keys are contiguous in both enums
+                    if (key >= Key.A && key <= Key.Z)
+                    {
+                        result = ImGuiKey.A + (key - Key.A);
+                        return true;
+                    }
+
+                    if (key >= Key.F1 && key <= Key.F12)
+                    {
+                        result = ImGuiKey.F1 + (key - Key.F1);
+                        return true;
+                    }
+
+                    result = ImGuiKey.None;
+                    return false;
             }
         }
 

@@ -11,6 +11,8 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- no XAML here; this only makes the WPF reference assemblies visible, because FrostySdk/FrostyCore expose WPF types in their public signatures -->
+    <UseWPF>true</UseWPF>
     <ApplicationIcon>..\FrostyModManager\AppIcon.ico</ApplicationIcon>
     <AssemblyVersion>1.0.6.3</AssemblyVersion>
     <FileVersion>1.0.6.3</FileVersion>

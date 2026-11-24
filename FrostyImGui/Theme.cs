@@ -76,9 +76,9 @@ namespace Frosty.ImGuiKit
             c[(int)ImGuiCol.Separator] = ButtonImage;
             c[(int)ImGuiCol.Tab] = MenuItemBackground;
             c[(int)ImGuiCol.TabHovered] = ControlHighlight;
-            c[(int)ImGuiCol.TabActive] = ControlBackground;
-            c[(int)ImGuiCol.TabUnfocused] = MenuItemBackground;
-            c[(int)ImGuiCol.TabUnfocusedActive] = ControlBackground;
+            c[(int)ImGuiCol.TabSelected] = ControlBackground;
+            c[(int)ImGuiCol.TabDimmed] = MenuItemBackground;
+            c[(int)ImGuiCol.TabDimmedSelected] = ControlBackground;
             c[(int)ImGuiCol.TableHeaderBg] = ControlBackground;
             c[(int)ImGuiCol.TableBorderStrong] = ButtonImage;
             c[(int)ImGuiCol.TableBorderLight] = SubItemHighlight;

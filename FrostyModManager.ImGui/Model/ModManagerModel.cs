@@ -17,6 +17,7 @@ using FrostySdk;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using Newtonsoft.Json;
 
 namespace FrostyModManager.Gui.Model

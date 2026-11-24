@@ -5,6 +5,7 @@ using System.Numerics;
 using Frosty.Core;
 using Frosty.Core.Managers;
 using Frosty.ImGuiKit;
+using FrostyCore;
 using FrostyModManager.Gui.Ui;
 using FrostySdk;
 using ImGuiNET;

@@ -31,11 +31,17 @@ jobs:
           msbuild-architecture: x64
 
       - name: Build
-        run: >-
-          msbuild "${{ matrix.project }}/${{ matrix.project }}.csproj"
-          -restore
-          -p:Configuration="Release - Final"
-          -p:Platform=x64
-          -p:RestorePackagesConfig=true
-          -maxcpucount
-          -verbosity:minimal
+        shell: pwsh
+        run: |
+          msbuild "${{ matrix.project }}/${{ matrix.project }}.csproj" -restore "-p:Configuration=Release - Final" -p:Platform=x64 -p:RestorePackagesConfig=true -maxcpucount -verbosity:minimal *> build.log
+          $code = $LASTEXITCODE
+          # surface compiler errors as one annotation so they can be read without downloading logs
+          $errs = Get-Content build.log | Where-Object { $_ -match 'error [A-Z]+[0-9]+' } |
+                  ForEach-Object { $_ -replace '^.*?\\FrostyToolsuite-1\\FrostyToolsuite-1\\', '' -replace '\s+\[[^\]]*\.csproj\]\s*$', '' } |
+                  Sort-Object -Unique | Select-Object -First 120
+          if ($errs) {
+            $msg = ($errs -join "`n") -replace '%', '%25' -replace "`r", '%0D' -replace "`n", '%0A'
+            Write-Output "::error title=Compiler errors (${{ matrix.project }})::$msg"
+          }
+          Get-Content build.log -Tail 15
+          exit $code

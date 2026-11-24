@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Frosty.Core;
 using Frosty.ImGuiKit;
+using FrostySdk;
 using FrostySdk.IO;
 using FrostySdk.Managers.Entries;
 using ImGuiNET;
